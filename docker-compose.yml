@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  database:
+    container_name: influxdb
+    image: influx_image
+    restart: always
+    ports:
+      - "8086:8086"
+    build:
+      context: .
+      dockerfile: services/influx/dockerfile
+    networks:
+      default:
+        aliases:
+          - influxdb
+
+  broker:
+    container_name: rabbit
+    image: rabbit_image
+    restart: always
+    build:
+      context: .
+      dockerfile: services/rabbit/dockerfile
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+      - "1883:1883"
+    networks:
+      default:
+        aliases:
+          - rabbit
+
+  visualizador:
+    container_name: grafana
+    image: grafana_image
+    restart: always
+    build:
+      context: .
+      dockerfile: services/grafana/dockerfile
+    ports:
+      - "3000:3000"
+    
+
